@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpacePlayer : MonoBehaviour
+public class SpacePlayer : MonoBehaviour, IDestructible
 {
     [Range(0, 100)] [Tooltip("Speed of the player")] public float speed = 40;
 
@@ -15,5 +15,19 @@ public class SpacePlayer : MonoBehaviour
 
         transform.Translate(direction * speed * Time.deltaTime);
         //transform.position += direction * speed * Time.deltaTime;
+
+        if (Input.GetButton("Fire1"))
+        {
+            GetComponent<SpaceWeapon>().Fire();
+        }
+
+        GameManager.Instance.playerHealth = GetComponent<Health>().health;
+    }
+
+    public void Destroyed()
+    {
+        GameManager.Instance.playerHealth = 0;
+        GameManager.Instance.OnPlayerDead();
+
     }
 }
